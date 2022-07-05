@@ -1,0 +1,65 @@
+RabbitMQ
+
+Ele é um Message Broker
+Desenvolvido em Erlang
+Ele garante o desacoplamento entre os serviços
+Rápido e Poderoso - Guarda tudo em memória
+Padrão de mercado
+
+por baixo dos panos
+
+tem o client e o server com comunicação TCP
+
+	-> Abre apenas uma única conexão persistente
+
+		dentro da conexão existem (Channels) que passam por dentro dessas conexões (Chamado de multiplexing connections)
+		1 thread por channel 
+
+Funcionamento Básico
+
+	Publisher - responsável por publicar a mensagem	para quem for consumir
+	Consumer - Quem vai ler as mensagens.
+	exchange - pega a mensagem, processa a mensagem, e descobre para qual fila a mensagem vai ser enviada.
+	Queue - O publisher envia a mensagem para o exchange que envia para a fila correta.
+
+Tipos de Exchange
+
+Direct  - Mandasse uma mensagem para uma exchange e ela vai rotear diretamente para uma fila.
+Fanout  - Exchange que envia mensagem para todas as filas que tem o bind com essa exchange.
+Topic   - 
+Headers - não muito utilizado
+
+Queues
+
+Padrão - FIFO (First In, First Out) - Primeiro a entrar é o primeiro a sair
+
+Propriedades:
+
+	-> Durable (sim ou não): Se ela deve ser salva mesmo depois do restart do broker. Padrão SIM.
+	-> Auto-delete: Removida automaticamente quando o consumer se desconecta.
+	-> Expiry: Define o tempo que não há mensagens ou clientes consumindo.
+	-> Message TTL: Tempo de vida da mensagem.
+	-> Overflow: 
+		- Drop head (remove a última)
+		- Reject publish
+	-> Exclusive: Somente channel que criou pode acessar
+	-> Max Length ou bytes: Quantidade de mensagens ou tamanho em bytes máximo permitido.
+
+Dead letter queues
+
+	-> Algumas mensagens não conseguem ser entregues por qualquer motivo
+	-> São encaminhadas para uma exchange específica que roteia as mensagens para uma dead letter queue
+	-> tais mensagens podem ser consumidas e averiguadas posteriormente.		
+
+Lazy queues
+
+	-> Mensagens são armazenadas em disco.
+	-> quando há muita informação e o consumer não está dando conta.
+	-> Exige Alto I/O
+	-> Quando há milhões de mensagens em uma fila, por qualquer motivo, há a possibilidade de liberar a memória, jogando especificamente
+		as mensagens da fila em questão em disco.
+
+
+
+Simulador RabbitMq		
+http://tryrabbitmq.com/
